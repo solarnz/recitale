@@ -10,6 +10,9 @@ from .utils import load_settings
 
 DATA = """title: {{ title }}
 date: {{ date }}
+{% if sub_title %}
+sub_title: {{sub_title}}
+{% endif %}
 cover: {{ cover }}
 sections:
   - type: pictures-group
@@ -70,6 +73,7 @@ def build_template(folder, force):
 
     files = sorted(files_grabbed, key=get_exif)
 
+    sub_title = gallery_settings.get("sub_title", None)
     cover = gallery_settings.get("cover", files[0].name)
     date = gallery_settings.get("date")
     if not date:
@@ -78,6 +82,7 @@ def build_template(folder, force):
 
     msg = template.render(
         title=gallery_settings["title"],
+        sub_title=sub_title,
         date=date,
         cover=cover,
         files=files,
